@@ -1,2 +1,2 @@
 # Homeworks-CS1_term2-
-A repo for homeworks.
+A repo for homeworks!
