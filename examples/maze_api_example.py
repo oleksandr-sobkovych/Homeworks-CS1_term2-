@@ -35,8 +35,8 @@ class GraphMaze:
             maze_url = f"https://maze-api.herokuapp.com/api/mazes/{maze_id}"
             maze = requests.get(maze_url).json()
         else:
-            if not all(map(lambda x: isinstance(x, int) and x >= 5, \
-                                    dimensions)):
+            if not all(map(lambda x: isinstance(x, int) and x >= 5,
+                           dimensions)):
                 dimensions = (None, None)
             pars = {
                 "number": 1,
@@ -69,7 +69,7 @@ class GraphMaze:
 
     def __str__(self):
         """Return the representable string provided by the API."""
-        return (self.graph["displayString"].replace("▁▁▁", "___"))
+        return self.graph["displayString"].replace("▁▁▁", "___")
 
     def solved(self):
         """Return a sting with the correct path in it."""
