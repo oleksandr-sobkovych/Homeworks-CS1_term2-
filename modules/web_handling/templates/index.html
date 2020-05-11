@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block ext_head %}
+  <script type="text/javascript" src="../static/maze.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<script>window.onload = init_index</script>
+
+
+    <form>
+
+      <div class="card mx-2 my-2">
+        <!-- <div class="card-header">Header</div> -->
+        <div class="card-body">
+          <div class="form-group">
+            <div class="row justify-content-around">
+
+              <div class="col-4">
+                <label for="construct_type">Maze construction type</label>
+                <select class="form-control custom-select" id="construct_type">
+                  {% for construct_item in construct_types %}
+                    <option value="{{ construct_item[0] }}">{{ construct_item[1] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="col-4">
+                <label for="maze_name">Maze name</label>
+                <input type="text" class="form-control" id="maze_name">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% for construct_item in construct_types %}
+        <div class="card mx-2 my-2 d-none" id="{{ construct_item[0] }}">
+          <div class="card-header">
+            {{ construct_item[2] }}
+          </div>
+
+          <!-- Maze API constructor -->
+          {% if construct_item[0] == 'construct_maze_api' %}
+            <div class="card-body">
+              <div class="form-group">
+
+                {% for option in api_options %}
+                  {% for k,v in option.items() %}
+
+                  <div class="row justify-content-md-center">
+                    <div class="col-6">
+                      <label for="construct_type">{{ v.title }}</label>
+                      {% if v.data %}
+                        <select class="form-control custom-select" id="{{ k }}">
+                          {% for item in v.data %}
+                            <option value="{{ item.0 }}">{{ item.1 }}</option>
+                          {% endfor %}
+                        </select>
+                      {% else %}
+                        <input type="text" class="form-control" id="{{ k }}">
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" id="mazeCreateFromAPI">Create</button>
+            </div>
+          {% endif %}
+          <!-- Maze Editor -->
+          {% if construct_item[0] == 'construct_editor' %}
+            <div class="card-body">
+              <div class="form-group">
+                <div class="row justify-content-around">
+                  <div class="col-3 align-self-center">
+                    <label for="mazeSize">Maze Size</label>
+                    <select class="form-control custom-select" id="mazeSize">
+                        <option value="10x10">10 X 10</option>
+                        <option value="15x15">15 X 15</option>
+                        <option value="20x20">20 X 20</option>
+                    </select>
+                  </div>
+                  <div class="col-3 align-self-center">
+                    <!-- <label for="randomThreshold" id="randomThresholdLabel">Chance of placing a wall: </label> -->
+                    <span id="randomThresholdLabel">Chance of placing a wall: </span>
+                    <input type="range" class="custom-range" min="1" max="99" id="randomThreshold">
+                  </div>
+                  <div class="col-3 align-self-center">
+                    <button type="button" class="btn btn-success" onclick="mazeRandomFill();">Random Fill</button>
+                  </div>
+                </div>
+                <hr>
+                <div class="row justify-content-around">
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="toggle-wall" name="mazeComponents" class="custom-control-input" checked>
+                    <label class="custom-control-label" for="toggle-wall">Wall element</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="toggle-start" name="mazeComponents" class="custom-control-input">
+                    <label class="custom-control-label" for="toggle-start">Start point</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="toggle-finish" name="mazeComponents" class="custom-control-input">
+                    <label class="custom-control-label" for="toggle-finish">Stop point</label>
+                  </div>
+                </div>
+                <hr>
+                <div class="row justify-content-center">
+                  <table id='userMazeField'></table>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" id="mazeCreateFromEditor">Create</button>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    </form>
+
+
+{% endblock %}

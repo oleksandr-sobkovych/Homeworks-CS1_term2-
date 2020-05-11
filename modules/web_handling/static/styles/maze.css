@@ -1,0 +1,27 @@
+table {
+    margin: 0 auto;
+    background: #eee;
+  }
+
+  th,
+  td {
+    width: 25px;
+    height: 25px;
+  }
+
+  td {
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+
+  .start {
+    background-color: #fa8c7d;
+  }
+
+  .finish {
+    background-color: #6fd891;
+  }
+
+  .wall {
+    background-color: #7d8efa;
+  }
