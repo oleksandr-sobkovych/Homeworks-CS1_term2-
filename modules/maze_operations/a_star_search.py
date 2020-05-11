@@ -59,7 +59,7 @@ class AStarSearcher:
         # path = Linked_list()
         path = []
         while cell is not None:
-            path.append(cell)
+            path.append(cell.data)
             cell = cell.next
         return path[::-1]
 

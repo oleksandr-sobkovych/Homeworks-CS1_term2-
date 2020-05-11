@@ -183,3 +183,10 @@ class Maze:
     def read_from_database(cls, path: str):
         """"""
         return path
+
+    def __repr__(self) -> str:
+        """"""
+        result_str = ""
+        for row in self.array:
+            result_str += f"{'  '.join(map(str, row))}\n"
+        return result_str

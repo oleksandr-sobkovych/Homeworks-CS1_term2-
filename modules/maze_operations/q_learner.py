@@ -2,7 +2,6 @@ import numpy as np
 from PIL import Image
 import cv2
 import matplotlib.pyplot as plt
-import pickle
 from matplotlib import style
 import time
 
@@ -92,13 +91,13 @@ class QLearner:
         self.env = np.array(self.array, dtype=np.int)
         self.q_table = np.random.random_sample((self.size, self.size) + (4,))
 
-    def train(self, learning_rate = 0.1, discount = 0.95):
+    def train(self, learning_rate = 0.1, discount = 0.95, verbose=False):
         epsilon = 1.0
         episode_rewards = []
         for episode in range(self.episodes):
             route = set()
             player = QAgent(*self.start)
-            if episode % self.SHOW_EVERY == 0:
+            if verbose and episode % self.SHOW_EVERY == 0:
                 print(f"on #{episode}, epsilon is {epsilon}")
                 print(
                     f"{self.SHOW_EVERY} ep mean: "

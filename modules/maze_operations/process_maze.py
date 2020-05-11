@@ -25,6 +25,3 @@ class BackgroundProcessor(threading.Thread):
     def process_maze(maze):
         """"""
         maze.save_to_database()
-        print("saving")
-        sleep(10)
-        print("ready")
