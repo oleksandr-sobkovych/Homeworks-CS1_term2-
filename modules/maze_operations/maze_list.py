@@ -22,20 +22,22 @@ class MazesList:
         return self.__dict__
 
     @staticmethod
-    def _filter_condition(elem, filters: list):
+    def _filter_condition(elem: dict, filters):
         """"""
+        print(filters)
         for filt in filters:
-            if filt not in elem:
+            if filt not in elem.keys() and filt not in elem.values():
                 return False
         return True
 
     def sort_by_key(self, key: str, filters: list):
         """"""
+        filters.pop("sort_option")
         with self.lock:
             filtered = filter(lambda x: self._filter_condition(x["parameters"],
                                                                    filters),
                               self.mazes_list)
-        return sorted(filtered, key=lambda x: x["parameters"][key][0])
+        return sorted(filtered, key=lambda x: x["parameters"][key])
 
     def save(self):
         """"""

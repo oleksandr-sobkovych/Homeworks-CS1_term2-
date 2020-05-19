@@ -29,9 +29,11 @@ def render_stats_page():
     global maze_list
     if session.get("mazes") is None:
         session["mazes"] = maze_list.get_current_mazes()
-    print(request.args)
+    if request.args:
+        session["mazes"] = maze_list.sort_by_key(request.args["sort_option"],
+                                dict(request.args))
     return render_template("stats.html",
-                           **maze_list.get_context())
+                           **maze_list.get_context(), mazes=session["mazes"])
 
 
 @app.route("/api/", methods=["POST"])
@@ -80,4 +82,5 @@ if __name__ == '__main__':
     maze_list = MazesList()
     queue = Queue()
     BackgroundProcessor(queue, maze_list).start()
+    print(maze_list.mazes_list)
     app.run()

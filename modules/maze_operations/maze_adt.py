@@ -192,9 +192,14 @@ class Maze:
         with open(path / "data.json", encoding="utf-8", mode="w+") as f:
             json.dump(json_data, f, indent=4)
         json_data.pop("name")
+        final_q = json_data.pop("q_data")
         dict_repr = {"name": self.name,
                      "parameters": json_data,
-                     "image": f"{path.name}/img.jpg"}
+                     "image": f"../database/{path.name}/img.jpg"}
+        dict_repr["parameters"].update(final_q)
+        dict_repr["parameters"]["size"] = "x".join(map(str, self.size))
+        dict_repr["parameters"].pop("array")
+        dict_repr["parameters"]["route_len"] = len(self.optimal_route)
         return dict_repr
 
     def _find_optimal_route(self):
@@ -210,8 +215,10 @@ class Maze:
         qlearner = QLearner(self)
         self.q_data = qlearner.train_env(self.learning_rate, self.discount)
         self.img = QLearner(self).draw_maze(self.q_data["solution_path"])
-        self.q_data["difference"] = len(self.q_data["solution_path"] &
-                                        self.optimal_route)
+        self.q_data["difference"] = len(
+            (self.q_data["solution_path"] | self.optimal_route) -
+            (self.q_data["solution_path"] & self.optimal_route)
+        )
 
         self.q_data["solution_path"] = tuple(self.q_data["solution_path"])
 

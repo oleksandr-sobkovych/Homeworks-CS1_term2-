@@ -36,15 +36,16 @@
         }
     ],
     "sort_keys": [
-        ["general_optimality", "General Optimality"],
-        ["solution_episode", "Solution Episode"],
-        ["route_difference", "Route Difference (from optimal)"],
-        ["optimal_route_length", "Optimal Route Length"]
+        ["max_reward", "General Optimality"],
+        ["solution episode", "Solution Episode"],
+        ["difference", "Route Difference (from optimal)"],
+        ["route_len", "Optimal Route Length"]
     ],
     "filters_set": [
-        [["user_generated", "User-Generated"], ["prims", "Prims"]],
-        [["woven", "Woven"], ["growing_tree", "Growing Tree"]],
-        [["recursive_backtracker", "Recursive Backtracker"], ["", "Filter-6"]],
-        [["filter_id_7", "Filter-7"], ["filter_id_8", "Filter-8"]]
+        [["User", "User-Generated"], ["Prims", "Prims"]],
+        [["Woven", "Woven"], ["Growing%20Tree", "Growing Tree"]],
+        [["Recursive%20Backtracker", "Recursive Backtracker"], ["10x10", "10x10"]],
+        [["15x15", "15x15"], ["20x20", "20x20"]],
+        [["30x30", "30x30"]]
     ]
 }
