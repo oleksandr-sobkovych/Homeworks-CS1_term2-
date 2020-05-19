@@ -1,6 +1,6 @@
 # Q-Learning Maze Classifier
 
-Generate your own mazes on the [web page](web_page_link).
+Generate your own mazes on the [web page][web_page_link].
 Use Q-Learning techniques to classify mazes by their difficulty considering completion time, path length, path optimality (determined using the A* algorithm). Get the mazes by their difficulty in terms of the parameters listed above to use for progressive Deep Q Learning networks' training.
 
 ## Installation
@@ -9,7 +9,7 @@ Clone the project repository, run /modules/web_handling/app.py to host the proje
 
 ## Usage example
 
-_For examples and usage, please refer to the [Wiki][wiki]._
+_For examples and usage, please refer to the [Wiki][wiki] and video._
 
 ## Release History
 
@@ -34,4 +34,3 @@ Use generated data for any non-commercial intends and purposes.
 [license_link]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/blob/master/LICENSE
 [web_page_link]: http://alex0sobkovych.pythonanywhere.com/
 [wiki]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/wiki
-[scr1]: 
