@@ -2,6 +2,7 @@
 
 import threading
 from time import sleep
+from modules.maze_operations.maze_adt import MazeUnsolvableError
 
 
 class BackgroundProcessor(threading.Thread):
@@ -28,9 +29,14 @@ class BackgroundProcessor(threading.Thread):
     def process_maze(self, maze):
         """"""
         base_name = maze.name
-        for l_rate in self.l_rates:
-            for discount in self.discounts:
-                maze.find_q_data()
-                maze.name = f"{base_name}-{l_rate}-{discount}"
-                self.maze_list.mazes_list.append(maze.save_to_database())
-        print(f"Thread has finished processing {base_name} maze.")
+        try:
+            for l_rate in self.l_rates:
+                for discount in self.discounts:
+                    maze.find_q_data()
+                    maze.name = f"{base_name}-{l_rate}-{discount}"
+                    self.maze_list.mazes_list.append(maze.save_to_database())
+            self.maze_list.save()
+        except MazeUnsolvableError:
+            print("Impossible to solve.")
+        else:
+            print(f"Thread has finished processing {base_name} maze.")

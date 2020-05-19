@@ -55,7 +55,7 @@ class QLearner:
     ENEMY_PENALTY = 300
     FOOD_REWARD = 25
     EPS_DECAY = 0.9998
-    OPTIMIZATION_COEFF = 7
+    OPTIMIZATION_COEFF = 2000
     # BGR for some reason in cv2
     colors = {1: (255, 119, 0),
               2: (111, 216, 145),
@@ -148,7 +148,7 @@ class QLearner:
             show = True
 
         episode_reward = 0
-        for i in range(ITERATIONS):
+        for i in range(self.iterations):
             obs = player.position
             choice = self.choose_action(obs)
             # take the action
@@ -205,7 +205,7 @@ class QLearner:
         q_feed["solution episode"] = episode
         track = {}
         # allow agent to optimize found route
-        for episode in range(episode, self.OPTIMIZATION_COEFF*episode):
+        for episode in range(episode, self.OPTIMIZATION_COEFF+episode):
             route = self.train_single_episode(episode, episode_rewards,
                                               learning_rate, discount, verbose,
                                               track=True)

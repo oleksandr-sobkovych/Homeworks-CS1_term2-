@@ -6,7 +6,6 @@ from modules.maze_operations.maze_adt import Maze, MazeUnsolvableError, \
     MazeNameError, MazeConstructionError
 from modules.maze_operations.process_maze import BackgroundProcessor
 from modules.helper_collections.llistqueue import Queue
-import json
 from modules.maze_operations.maze_list import MazesList
 
 
@@ -30,8 +29,7 @@ def render_stats_page():
     global maze_list
     if session.get("mazes") is None:
         session["mazes"] = maze_list.get_current_mazes()
-    for elem in request.args:
-        print(elem)
+    print(request.args)
     return render_template("stats.html",
                            **maze_list.get_context())
 
@@ -51,6 +49,8 @@ def handle_api_request():
     except MazeNameError:
         res = make_response(jsonify({"message": "Name should contain only "
                                                 "A-Z, a-z and _"}), 422)
+    except MazeUnsolvableError:
+        res = make_response(jsonify({"message": "Should be solvable"}), 422)
     else:
         res = make_response(jsonify({"message": "OK"}), 200)
         queue.push(maze)
@@ -68,6 +68,8 @@ def handle_editor_request():
     except MazeNameError:
         res = make_response(jsonify({"message": "Name should contain only "
                                                 "A-Z, a-z and _"}), 422)
+    except MazeUnsolvableError:
+        res = make_response(jsonify({"message": "Should be solvable"}), 422)
     else:
         res = make_response(jsonify({"message": "OK"}), 200)
         queue.push(maze)
