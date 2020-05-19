@@ -199,6 +199,8 @@ class Maze:
         dict_repr["parameters"].update(final_q)
         dict_repr["parameters"]["size"] = "x".join(map(str, self.size))
         dict_repr["parameters"].pop("array")
+        dict_repr["parameters"].pop("optimal_route")
+        dict_repr["parameters"].pop("solution_path")
         dict_repr["parameters"]["route_len"] = len(self.optimal_route)
         return dict_repr
 
