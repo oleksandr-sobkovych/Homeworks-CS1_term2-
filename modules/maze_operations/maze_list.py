@@ -26,9 +26,9 @@ class MazesList:
         """"""
         print(filters)
         for filt in filters:
-            if filt not in elem.keys() and filt not in elem.values():
-                return False
-        return True
+            if filt in elem.keys() or filt in elem.values():
+                return True
+        return False
 
     def sort_by_key(self, key: str, filters: list):
         """"""
