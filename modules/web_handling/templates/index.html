@@ -6,9 +6,6 @@
 
 {% block content %}
 
-<script>window.onload = init_index</script>
-
-
     <form>
 
       <div class="card mx-2 my-2">
@@ -27,7 +24,7 @@
               </div>
 
               <div class="col-4">
-                <label for="maze_name">Maze name</label>
+                <label for="maze_name">Maze name (allowed: A-Z, a-z and _)</label>
                 <input type="text" class="form-control" id="maze_name">
               </div>
 
@@ -35,6 +32,7 @@
           </div>
         </div>
       </div>
+      <div class="mt-2" id="alertMessage"></div>
 
       {% for construct_item in construct_types %}
         <div class="card mx-2 my-2 d-none" id="{{ construct_item[0] }}">
@@ -125,5 +123,6 @@
 
     </form>
 
+<script>window.onload = init_index</script>
 
 {% endblock %}

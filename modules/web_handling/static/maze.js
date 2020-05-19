@@ -4,6 +4,8 @@ const MAZE_FREE_VALUE = 0;
 const MAZE_WALL_VALUE = 1;
 const MAZE_START_VALUE = 2;
 const MAZE_FINISH_VALUE = 3;
+const ALERT_SHOW_TIMEOUT_MS = 5000;
+
 
 let init_index = () => {
     let selectConstructType = document.getElementById('construct_type');
@@ -23,12 +25,44 @@ let init_index = () => {
 
     let submitButtonEditor = document.getElementById('mazeCreateFromEditor');
     submitButtonEditor.addEventListener('click', submitFromEditor);
+    setActiveNavTab();
 };
 
 
 let init_stats = () => {
-    let filterButton = document.getElementById('buttonApplyMazeFilter');
-    filterButton.addEventListener('click', applyMazeFilter);
+    // get URL parameters and apply to current filter state
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    for (let entry of urlParams.entries()) {
+        let item = document.getElementById(entry[0]);
+        if (item) {
+            switch (item.tagName) {
+                case 'SELECT':
+                    item.value = entry[1];
+                    break;
+                case 'INPUT':
+                    item.checked = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    setActiveNavTab();
+}
+
+
+function setActiveNavTab() {
+    const navRefs = document.querySelector('nav').querySelectorAll('li');
+    navRefs.forEach(ref => {
+        if (ref.childElementCount > 0) {
+            if (ref.children[0].href === location.href) {
+                ref.classList.add('active');
+            } else {
+                ref.classList.remove('active');
+            }
+        }
+    });
 }
 
 
@@ -43,6 +77,13 @@ function showAlertMessage(message_class, message_text) {
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>`;
+    setTimeout(() => {
+        if (alertObj && alertObj.parentElement) {
+            alertObj.parentElement.removeChild(alertObj);
+        }
+    }, ALERT_SHOW_TIMEOUT_MS);
+
+    window.scrollTo({left:0, top:0, behavior:'smooth'});
 }
 
 
@@ -88,57 +129,40 @@ function renderUserMaze() {
 
 function thresholdChange() {
     let label = document.getElementById('randomThresholdLabel');
-    label.innerHTML = 'Chance of placing a wall: ' + this.value + '%';
+    label.innerHTML = `Chance of placing a wall: ${this.value}%`;
 }
 
 
 function toggleMazeCell(cellObj) {
-    let toggleWall = document.getElementById('toggle-wall').checked;
-    let toggleStart = document.getElementById('toggle-start').checked;
-    let toggleFinish = document.getElementById('toggle-finish').checked;
-
-    if (toggleWall) {
-        switch(parseInt(cellObj.getAttribute('value'))) {
-            case MAZE_FREE_VALUE:
-                cellObj.setAttribute('value', MAZE_WALL_VALUE);
-                cellObj.classList.add('wall');
-                break;
-            case MAZE_WALL_VALUE:
-                cellObj.setAttribute('value', MAZE_FREE_VALUE);
-                cellObj.classList.remove('wall');
-                break;
-        }
-    } else if (toggleStart) {
-        switch(parseInt(cellObj.getAttribute('value'))) {
-            case MAZE_FREE_VALUE:
-                mazeFieldClearValue(MAZE_START_VALUE, 'start');
-                cellObj.setAttribute('value', MAZE_START_VALUE);
-                cellObj.classList.add('start');
-                break;
-            case MAZE_START_VALUE:
-                cellObj.setAttribute('value', MAZE_FREE_VALUE);
-                cellObj.classList.remove('start');
-                break;
-        }
-    } else if (toggleFinish) {
-        switch(parseInt(cellObj.getAttribute('value'))) {
-            case MAZE_FREE_VALUE:
-                mazeFieldClearValue(MAZE_FINISH_VALUE, 'finish');
-                cellObj.setAttribute('value', MAZE_FINISH_VALUE);
-                cellObj.classList.add('finish');
-                break;
-            case MAZE_FINISH_VALUE:
-                cellObj.setAttribute('value', MAZE_FREE_VALUE);
-                cellObj.classList.remove('finish');
-                break;
-        }
+    if (document.getElementById('toggle-wall').checked) {
+        mazeFieldToggleState(cellObj, MAZE_WALL_VALUE, 'wall');
+    } else if (document.getElementById('toggle-start').checked) {
+        mazeFieldToggleState(cellObj, MAZE_START_VALUE, 'start', true);
+    } else if (document.getElementById('toggle-finish').checked) {
+        mazeFieldToggleState(cellObj, MAZE_FINISH_VALUE, 'finish', true);
     } else {
         console.error('First you need to chose toggle object type (eg: wall, start or finish)' );
     }
 }
 
 
-function mazeFieldClearValue(value, class_name) {
+function mazeFieldToggleState(cellObj, toggleValue, className, isExclusive = false) {
+    let currTypeValue = parseInt(cellObj.getAttribute('value'));
+
+    if (currTypeValue === toggleValue) {
+        cellObj.setAttribute('value', MAZE_FREE_VALUE);
+        cellObj.classList.remove(className);
+    } else if (currTypeValue === MAZE_FREE_VALUE) {
+        if (isExclusive) {
+            mazeFieldClearValue(toggleValue, className);
+        }
+        cellObj.setAttribute('value', toggleValue);
+        cellObj.classList.add(className);
+    }
+}
+
+
+function mazeFieldClearValue(value, className) {
     let mazeFieldTable = document.getElementById('userMazeField');
     if ( !mazeFieldTable ) {
         return;
@@ -146,14 +170,15 @@ function mazeFieldClearValue(value, class_name) {
     for (let i = 0; i < mazeFieldTable.rows.length; i++) {
         for (let j = 0; j < mazeFieldTable.rows[i].cells.length; j++) {
             let cell = mazeFieldTable.rows[i].cells[j];
-            if (parseInt(cell.getAttribute('value')) == value) {
+            if (parseInt(cell.getAttribute('value')) === value) {
                 cell.setAttribute('value', MAZE_FREE_VALUE);
-                cell.classList.remove(class_name);
+                cell.classList.remove(className);
                 return;
             }
         }
     }
 }
+
 
 function mazeRandomFill() {
     let mazeFieldTable = document.getElementById('userMazeField');
@@ -164,8 +189,7 @@ function mazeRandomFill() {
     for (let i = 0; i < mazeFieldTable.rows.length; i++) {
         for (let j = 0; j < mazeFieldTable.rows[i].cells.length; j++) {
             let cell = mazeFieldTable.rows[i].cells[j];
-            let rndValue = Math.random();
-            if (rndValue * 100 < rndThreshold.value) {
+            if (Math.random() * 100 < rndThreshold.value) {
                 cell.setAttribute('value', MAZE_WALL_VALUE);
                 cell.classList.add('wall');
             } else {
@@ -173,6 +197,14 @@ function mazeRandomFill() {
                 cell.className = '';
             }
         }
+    }
+}
+
+
+function markInvalidInputData(obj) {
+    obj.classList.add('is-invalid');
+    obj.oninput = () => {
+        obj.classList.remove('is-invalid');
     }
 }
 
@@ -188,33 +220,22 @@ function submitFromAPI() {
     let isDataValid = true;
 
     if (mazeName.value.length == 0) {
-        mazeName.classList.add('is-invalid');
-        mazeName.oninput = () => {
-            mazeName.classList.remove('is-invalid');
-        }
+        markInvalidInputData(mazeName);
         isDataValid = false;
     }
 
-    let solutionLenValue = 0;
+    let solutionLenValue;
     if (solutionLen && solutionLen.value.length) {
         let numsOnly = solutionLen.value.replace(/\D/g,'');
         if (numsOnly.length) {
             solutionLenValue = parseInt(numsOnly);
         }
     }
-    if (solutionLenValue <= 0) {
-        solutionLen.classList.add('is-invalid');
-        solutionLen.oninput = () => {
-            solutionLen.classList.remove('is-invalid');
-        }
-        isDataValid = false;
+    else {
+        solutionLenValue = 0;
     }
-
-    if (mazeId.value.length == 0) {
-        mazeId.classList.add('is-invalid');
-        mazeId.oninput = () => {
-            mazeId.classList.remove('is-invalid');
-        }
+    if (solutionLenValue < 0) {
+        markInvalidInputData(solutionLen);
         isDataValid = false;
     }
 
@@ -230,7 +251,14 @@ function submitFromAPI() {
         solution_len: solutionLenValue,
         maze_id:      mazeId
     };
-    postDataToServer('api/', api_data);
+
+    let btnObj = this;
+    let savedBtnText = disableButton(btnObj, 'Wait...');
+
+    postDataToServer('api/', api_data)
+        .then(() => {
+            enableButton(btnObj, savedBtnText);
+        });
 }
 
 
@@ -240,11 +268,8 @@ function submitFromEditor() {
         return;
     }
     let maze_name = document.getElementById('maze_name');
-    if (maze_name.value.length == 0) {
-        maze_name.classList.add('is-invalid');
-        maze_name.oninput = () => {
-            maze_name.classList.remove('is-invalid');
-        }
+    if (maze_name.value.length === 0) {
+        markInvalidInputData(maze_name);
         showAlertMessage('danger', 'Please provide correct input for all necessary fields!');
         return;
     }
@@ -261,49 +286,50 @@ function submitFromEditor() {
         }
         editor_data.array.push(tr_data);
     }
-    postDataToServer('editor/', editor_data);
-}
 
+    let btnObj = this;
+    let savedBtnText = disableButton(btnObj, 'Wait...');
 
-function applyMazeFilter() {
-    let filter_data = {
-        'sort': document.getElementById('sort_option').value,
-        'filters': [],
-    }
-
-    let inputs = document.querySelectorAll("input[type='checkbox']");
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].checked) {
-            filter_data.filters.push(inputs[i].id);
-        }
-    }
-    postDataToServer('filter/', filter_data);
-}
-
-
-function postDataToServer(destination, txData) {
-    console.log('POST data:', txData);
-    fetch(`${window.origin}/` + destination, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(txData),
-        cache: "no-cache",
-        headers: new Headers({
-          "content-type": "application/json"
-        })
-      })
-        .then(function (response) {
-          if (response.status !== 200) {
-            showAlertMessage('danger', `Request failed: ${response.status} - ${response.statusText}`);
-            // console.log(`Looks like there was a problem. Status code: ${response.status}`);
-            return;
-          }
-          response.json().then(function (data) {
-            showAlertMessage('success', 'Request succeed, response data: ' + JSON.stringify(data));
-            // console.log(data);
-          });
-        })
-        .catch(function (error) {
-          console.log("Fetch error: " + error);
+    postDataToServer('editor/', editor_data)
+        .then(() => {
+            enableButton(btnObj, savedBtnText);
         });
+}
+
+
+function disableButton(obj, text) {
+    let savedText = '';
+    if (obj) {
+        savedText = obj.innerHTML;
+        obj.disabled = true;
+        obj.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${text}`;
+    }
+    return savedText;
+}
+
+
+function enableButton(obj, text) {
+    if (obj) {
+        obj.disabled = false;
+        obj.innerHTML = text;
+    }
+}
+
+
+async function postDataToServer(destination, data) {
+    let request_params = {
+        method:      "POST",
+        credentials: "include",
+        body:        JSON.stringify(data),
+        cache:       "no-cache",
+        headers:     new Headers({"content-type":"application/json"})
+    };
+
+    let response = await fetch(`${window.origin}/${destination}`, request_params);
+
+    if (response.status === 200) {
+        showAlertMessage('success', `Request succeed, status code: ${response.status}.`);
+    } else {
+        showAlertMessage('danger', `Request failed, status code: ${response.status} (${response.statusText})!`);
+    }
 }

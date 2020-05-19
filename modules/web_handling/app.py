@@ -1,136 +1,59 @@
 """"""
-from flask import request, jsonify, make_response, Flask, render_template
-from modules.maze_operations.maze_adt import Maze
-from modules.maze_operations.process_maze import Processor
+from flask import request, jsonify, make_response, Flask, render_template,\
+    session
+from flask_session import Session
+from modules.maze_operations.maze_adt import Maze, MazeUnsolvableError, \
+    MazeNameError, MazeConstructionError
+from modules.maze_operations.process_maze import BackgroundProcessor
 from modules.helper_collections.llistqueue import Queue
+import json
+from modules.maze_operations.maze_list import MazesList
 
 
-MAZE_CONTEXT_DATA = {
-    'construct_types': [
-        ['construct_maze_api', 'Maze API',
-         'Set API parameters and hit Create button'],
-        ['construct_editor', 'Editor',
-         'Build your own maze and hit Create button'],
-    ],
-    'api_options': [
-        {'api_maze_size': {'title': 'Maze Size',
-                           'data': [
-                               ['10x10', '10 x 10'],
-                               ['20x20', '20 x 20'],
-                               ['30x30', '30 x 30'],
-                           ]
-                           }
-        },
-        {
-            'api_algorithm': {
-                'title': 'API Algorithm',
-                'data': [
-                    ['api_alg_qsort', 'Quick Sort'],
-                    ['api_alg_bubble_sort', 'Bubble Sort'],
-                ]
-            }
-        },
-        {
-            'api_length': {
-                'title': 'Solution length',
-            }
-        },
-        {
-            'api_maze_id': {
-                'title': 'Maze ID',
-            }
-        },
-    ],
-    'sort_keys': [
-        ['time', 'Time'],
-        ['optimality', 'Optimality'],
-    ],
-    'filters_set': [
-        [['filter_id_1', 'Filter-1'], ['filter_id_2', 'Filter-2']],
-        [['filter_id_3', 'Filter-3'], ['filter_id_4', 'Filter-4']],
-        [['filter_id_5', 'Filter-5'], ['filter_id_6', 'Filter-6']],
-        [['filter_id_7', 'Filter-7'], ['filter_id_8', 'Filter-8']],
-    ],
-    'mazes_list': [
-        {
-            'name': 'My Super Pupper maze 1',
-            'parameters': [
-                ['Param Name 1', 'Value 1'],
-                ['Param Name 2', 'Value 2'],
-                ['Param Name 3', 'Value 3'],
-                ['Param Name 4', 'Value 4'],
-                ['Param Name 5', 'Value 5'],
-                ['Param Name 6', 'Value 6'],
-                ['Param Name 7', 'Value 7'],
-                ['Param Name 8', 'Value 8'],
-            ],
-            'performance': 'img/graph-1.png',
-            'image': 'img/maze-1.png'
-        },
-        {
-            'name': 'My Super Pupper maze 2',
-            'parameters': [
-                ['Param Name 1', 'Value 1'],
-                ['Param Name 2', 'Value 2'],
-                ['Param Name 3', 'Value 3'],
-                ['Param Name 4', 'Value 4'],
-                ['Param Name 5', 'Value 5'],
-                ['Param Name 6', 'Value 6'],
-                ['Param Name 7', 'Value 7'],
-                ['Param Name 8', 'Value 8'],
-            ],
-            'performance': 'img/graph-1.png',
-            'image': 'img/maze-1.png'
-        },
-        {
-            'name': 'My Super Pupper maze 3',
-            'parameters': [
-                ['Param Name 1', 'Value 1'],
-                ['Param Name 2', 'Value 2'],
-                ['Param Name 3', 'Value 3'],
-                ['Param Name 4', 'Value 4'],
-                ['Param Name 5', 'Value 5'],
-                ['Param Name 6', 'Value 6'],
-                ['Param Name 7', 'Value 7'],
-                ['Param Name 8', 'Value 8'],
-            ],
-            'performance': 'static/img/graph-1.png',
-            'image': 'static/img/maze-1.png'
-        },
-    ]
-}
 app = Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 
 @app.route("/", methods=["GET"])
 def render_main_page():
-    """"""
-    return render_template("index.html", **MAZE_CONTEXT_DATA)
+    """Render the main page on GET request."""
+    global maze_list
+    return render_template("index.html",
+                           **maze_list.get_context())
 
 
 @app.route("/stats.html", methods=["GET"])
 def render_stats_page():
     """"""
-    return render_template("stats.html", **MAZE_CONTEXT_DATA)
-
-
-@app.route("/filter/", methods=["POST"])
-def get_stats():
-    """"""
-    req = request.get_json()
-    print(req)
-    return "res"
+    global maze_list
+    if session.get("mazes") is None:
+        session["mazes"] = maze_list.get_current_mazes()
+    for elem in request.args:
+        print(elem)
+    return render_template("stats.html",
+                           **maze_list.get_context())
 
 
 @app.route("/api/", methods=["POST"])
 def handle_api_request():
     """"""
+    global queue
     req = request.get_json()
     print(req)
-    # print(Maze.from_api(**req).array)
-
-    res = make_response(jsonify({"message": "OK"}), 200)
-
+    try:
+        maze = Maze.from_api(**req)
+    except MazeConstructionError:
+        res = make_response(jsonify({"message":
+                                     "API does not support this data "
+                                     "combination"}), 422)
+    except MazeNameError:
+        res = make_response(jsonify({"message": "Name should contain only "
+                                                "A-Z, a-z and _"}), 422)
+    else:
+        res = make_response(jsonify({"message": "OK"}), 200)
+        queue.push(maze)
     return res
 
 
@@ -140,14 +63,19 @@ def handle_editor_request():
     global queue
     req = request.get_json()
     print(req)
-    queue.push(Maze(**req))
-    res = make_response(jsonify({"message": "OK"}), 200)
-
+    try:
+        maze = Maze(**req)
+    except MazeNameError:
+        res = make_response(jsonify({"message": "Name should contain only "
+                                                "A-Z, a-z and _"}), 422)
+    else:
+        res = make_response(jsonify({"message": "OK"}), 200)
+        queue.push(maze)
     return res
 
 
 if __name__ == '__main__':
+    maze_list = MazesList()
     queue = Queue()
-    Processor(queue).start()
-    print("ready")
-    app.run(debug=False)
+    BackgroundProcessor(queue, maze_list).start()
+    app.run()

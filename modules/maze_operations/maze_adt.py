@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from modules.maze_operations.a_star_search import AStarSearcher
 from modules.maze_operations.q_learner import QLearner
+from PIL import Image
 
 
 class MazeConstructionError(Exception):
@@ -14,6 +15,16 @@ class MazeConstructionError(Exception):
     def __init__(self, dimens: tuple, solution_len: int):
         super().__init__(f"unable to build a maze with solution length"
                          f" {solution_len} and of dimensions: {dimens}")
+
+
+class MazeNameError(Exception):
+    """Exception for invalid maze name."""
+    pass
+
+
+class MazeUnsolvableError(Exception):
+    """Indicates that maze cannot be solved."""
+    pass
 
 
 class Maze:
@@ -24,27 +35,27 @@ class Maze:
         if re.fullmatch(r"[\w_\d]+", name):
             self.name = name
         else:
-            raise ValueError(f"name should be an allowed one")
+            raise MazeNameError(f"name should be an allowed one")
         self.size = tuple(map(int, size))
         # self.array = self._list_to_array(array)
         self.array = array
-        if "_optimal_route" in kwargs:
-            self.optimal_route = kwargs["_optimal_route"]
-        else:
-            self.optimal_route = None
-        if "_q_data" in kwargs:
-            self.q_data = kwargs["_q_data"]
-        else:
-            self.q_data = []
+        allowed_params = {"optimal_route": [],
+                          "q_data": {},
+                          "img": None,
+                          "learning_rate": 0.1,
+                          "discount": 0.95,
+                          "algo": "User"}
+        for param in allowed_params:
+            self._init_param(param, kwargs, allowed_params[param])
+        self.start = self.finish = None
         self._search_endpoints()
-        if "img" in kwargs:
-            self.img = kwargs["img"]
+
+    def _init_param(self, param: str, source_collection, default):
+        """"""
+        if param in source_collection:
+            self.__dict__[param] = source_collection[param]
         else:
-            self.img = None
-        if "graph" in kwargs:
-            self.graph = kwargs["graph"]
-        else:
-            self.graph = None
+            self.__dict__[param] = default
 
     def _list_to_array(self, lst: list) -> Array2D:
         """"""
@@ -63,6 +74,8 @@ class Maze:
                     self.start = (i, ii)
                 elif array[i][ii] == 3:
                     self.finish = (i, ii)
+        if self.start is None or self.finish is None:
+            raise MazeUnsolvableError("no endpoints")
 
     @staticmethod
     def _scale(*args: str, adder=0):
@@ -124,10 +137,11 @@ class Maze:
             dimensions = (int(dimensions["width"]),
                           int(dimensions["height"]))
         else:
+            dimensions = tuple(map(int, dimensions))
             if not all(map(lambda x: isinstance(x, int) and x >= 5,
                            dimensions)):
-                dimensions = (None, None)
-            pars = {
+                dimensions = (10, 10)
+            params = {
                 "number": 1,
                 "width": dimensions[0],
                 "height": dimensions[1],
@@ -135,14 +149,14 @@ class Maze:
                 if algo in ("Prims", "Woven", "Growing Tree") else
                 "Recursive%20Backtracker",
                 "cellShape": "Square",
-                "solutionLength": solution_len
-                if algo in ("Prims", "Growing Tree") else None
+                "solutionLength": solution_len if solution_len and
+                algo in ("Prims", "Growing Tree") else None
             }
             # compose all parameters in a single GET request
             maze_pars = '&'.join(
-                map(lambda x: f'{x}={pars[x]}',
-                    filter(lambda y: True if pars[y] is not None else False,
-                           pars))
+                map(lambda x: f'{x}={params[x]}',
+                    filter(lambda y: True if params[y] is not None else False,
+                           params))
             )
             maze_url = (f"https://maze-api.herokuapp.com/api/mazes/?"
                         f"{maze_pars}")
@@ -152,37 +166,66 @@ class Maze:
                 raise MazeConstructionError(dimensions, solution_len)
 
         array, size = cls._graph_to_array(graph["cellMap"], dimensions,
-                                         graph["start"], graph["end"])
+                                          graph["start"], graph["end"])
 
-        return cls(name=name, size=size, array=array)
+        return cls(name=name, size=size, array=array, algo=algo)
 
     def save_to_database(self):
         """"""
+        if self.optimal_route is None:
+            raise MazeUnsolvableError("maze cannot be solved")
         path = Path(f"database/{self.name}")
         try:
             os.mkdir(path)
         except OSError:
-            print()
-        # self.img.save(path / "img.jpg")
-        # self.graph.savefig(path / "graph.png")
-        json_data = self.__dict__.copy()
-        json_data.pop("img")
-        json_data.pop("graph")
+            None
+        if self.img is not None:
+            self.img.save(path / "img.jpg")
+        json_data = {"name": self.name,
+                     "q_data": self.q_data,
+                     "size": self.size,
+                     "array": self.array,
+                     "optimal_route": tuple(self.optimal_route),
+                     "start": self.start,
+                     "finish": self.finish,
+                     "algo": self.algo}
         with open(path / "data.json", encoding="utf-8", mode="w+") as f:
             json.dump(json_data, f, indent=4)
+        json_data.pop("name")
+        dict_repr = {"name": self.name,
+                     "parameters": json_data,
+                     "image": f"{path.name}/img.jpg"}
+        return dict_repr
 
-    def find_optimal_route(self):
+    def _find_optimal_route(self):
         """"""
         self.optimal_route = AStarSearcher(self).search_path()
 
     def find_q_data(self):
         """"""
-        pass
+        if not self.optimal_route:
+            self._find_optimal_route()
+        if self.optimal_route is None:
+            raise MazeUnsolvableError("maze cannot be solved")
+        qlearner = QLearner(self)
+        self.q_data = qlearner.train_env(self.learning_rate, self.discount)
+        self.img = QLearner(self).draw_maze(self.q_data["solution_path"])
+        self.q_data["difference"] = len(self.q_data["solution_path"] &
+                                        self.optimal_route)
+
+        self.q_data["solution_path"] = tuple(self.q_data["solution_path"])
 
     @classmethod
     def read_from_database(cls, path: str):
         """"""
-        return path
+        path = Path(path)
+        try:
+            img = Image.open(path / "img.jpg")
+        except FileNotFoundError:
+            img = None
+        with open(path / "data.json", encoding="utf-8") as f:
+            json_data = json.load(f)
+        return cls(img=img, **json_data)
 
     def __repr__(self) -> str:
         """"""

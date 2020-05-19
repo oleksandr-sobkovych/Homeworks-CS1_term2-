@@ -56,12 +56,11 @@ class AStarSearcher:
     @staticmethod
     def _build_path(cell: _CellNode):
         """"""
-        # path = Linked_list()
-        path = []
+        path = set()
         while cell is not None:
-            path.append(cell.data)
+            path.add(cell.data)
             cell = cell.next
-        return path[::-1]
+        return path
 
     def search_path(self):
         """"""

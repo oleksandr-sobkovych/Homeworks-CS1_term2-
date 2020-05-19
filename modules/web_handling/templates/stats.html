@@ -6,53 +6,52 @@
 
 {% block content %}
 
-  <script>window.onload = init_stats</script>
 
-  <!-- Maze Filter Card -->
-  <div class="card my-3">
-    <h3 class="card-header">Choose mazes as you like</h3>
-    <div class="card-body">
-      <form>
-        <div class="row">
+  <form name="filter_form">
+    <!-- Maze Filter Card -->
+    <div class="card my-3">
+      <h3 class="card-header">Choose mazes as you like</h3>
+      <div class="card-body">
+          <div class="row">
 
-          <div class="col-4">
-            <div class="form-group">
-              <!-- <label for="sort_option">Sort by</label> -->
-              <h5 class="card-title">Sort by</h5> 
-                <select class="custom-select" id="sort_option">
-                  {% for s_key in sort_keys %}
-                    <option value="{{ s_key[0] }}">{{ s_key[1] }}</option>
-                  {% endfor %}
-                </select>
-            </div>
-          </div>
-
-          <div class="col offset-md-2">
-            <h5 class="card-title">Select filters</h5>
-            <div class="form-group">
-              <div class="row">
-                {% for filter_pair in filters_set %}
-                  {% for filter in filter_pair %}
-                    <div class="col">
-                      <div class="custom-control custom-checkbox mb-3">
-                        <input type="checkbox" class="custom-control-input" value="" id="{{ filter[0] }}">
-                        <label class="custom-control-label" for="{{ filter[0] }}">{{ filter[1] }}</label>
-                      </div>
-                    </div>
-                  {% endfor %}
-                  <div class="w-100"></div>
-                {% endfor %}
+            <div class="col-4">
+              <div class="form-group">
+                <!-- <label for="sort_option">Sort by</label> -->
+                <h5 class="card-title">Sort by</h5>
+                  <select class="custom-select" id="sort_option" name="sort_option">
+                    {% for s_key in sort_keys %}
+                      <option value="{{ s_key[0] }}">{{ s_key[1] }}</option>
+                    {% endfor %}
+                  </select>
               </div>
             </div>
-          </div>
 
-        </div>
-      </form>
+            <div class="col offset-md-2">
+              <h5 class="card-title">Select filters</h5>
+              <div class="form-group">
+                <div class="row">
+                  {% for filter_pair in filters_set %}
+                    {% for filter in filter_pair %}
+                      <div class="col">
+                        <div class="custom-control custom-checkbox mb-3">
+                          <input type="checkbox" class="custom-control-input" value="" id="{{ filter[0] }}" name="{{ filter[0] }}">
+                          <label class="custom-control-label" for="{{ filter[0] }}">{{ filter[1] }}</label>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" id="buttonApplyMazeFilter">Apply</button>
+      </div>
     </div>
-    <div class="card-footer">
-      <button type="button" class="btn btn-primary" id="buttonApplyMazeFilter">Apply</button>
-    </div>
-  </div>
+  </form>
 
   <!-- Maze Show Card -->
   <div class="card my-3">
@@ -64,7 +63,7 @@
         <li class="list-group-item">
           <div class="card">
             <div class="row no-gutters align-items-center">
-              <div class="col-md-8">
+              <div class="col-md-6">
                 <div class="card-body">
                   <h5 class="card-title">{{ maze.name }}</h5>
                   <div class="row">
@@ -76,31 +75,20 @@
                         </div>
                         <table class="table table-sm table-bordered table-light table-hover">
                           <tbody>
-                            {% for param in maze.parameters %}
+                            {% for key, value in maze.parameters.items() %}
                               <tr>
-                                <th scope="row" class="text-nowrap">{{ param[0] }}</th>
-                                <td class="text-nowrap">{{ param[1] }}</td>
+                                <th scope="row" class="text-nowrap">{{ key }}</th>
+                                <td class="text-nowrap">{{ value }}</td>
                               </tr>
                             {% endfor %}
                           </tbody>
                         </table>
                       </div>
                     </div>
-
-                    <div class="col">
-                      <div class="card">
-                        <div class="card-header">
-                          Performance
-                        </div>
-                        <div class="card-body">
-                          <img src="{{ maze.performance }}" class="mx-auto d-block" alt="Graph image">
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <img src="{{ maze.image }}" class="card-img" alt="Maze image">
               </div>
             </div>
@@ -110,5 +98,7 @@
     </ul>
   </div>
 </div>
+
+  <script>window.onload = init_stats</script>
 
 {% endblock %}

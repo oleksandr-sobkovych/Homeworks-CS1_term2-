@@ -1,0 +1,17 @@
+[
+    {
+        "name": "My Super Pupper maze 1",
+        "parameters": {
+            "Param Name 1": "Value 1",
+            "Param Name 2": "Value 2",
+            "Param Name 3": "Value 3",
+            "Param Name 4": "Value 4",
+            "Param Name 5": "Value 5",
+            "Param Name 6": "Value 6",
+            "Param Name 7": "Value 7",
+            "Param Name 8": "Value 8"
+        },
+        "performance": "img/graph-1.png",
+        "image": "img/maze-1.png"
+    }
+]
