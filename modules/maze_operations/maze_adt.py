@@ -174,7 +174,7 @@ class Maze:
         """"""
         if self.optimal_route is None:
             raise MazeUnsolvableError("maze cannot be solved")
-        path = Path(f"database/{self.name}")
+        path = Path(f"static/database/{self.name}")
         try:
             os.mkdir(path)
         except OSError:
@@ -195,7 +195,7 @@ class Maze:
         final_q = json_data.pop("q_data")
         dict_repr = {"name": self.name,
                      "parameters": json_data,
-                     "image": f"../database/{path.name}/img.jpg"}
+                     "image": f"../static/database/{path.name}/img.jpg"}
         dict_repr["parameters"].update(final_q)
         dict_repr["parameters"]["size"] = "x".join(map(str, self.size))
         dict_repr["parameters"].pop("array")

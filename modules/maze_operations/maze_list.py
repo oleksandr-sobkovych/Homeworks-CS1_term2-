@@ -6,8 +6,8 @@ from threading import Lock
 class MazesList:
     """"""
 
-    def __init__(self, options_filename: str = "database/options.json",
-                 list_filename: str = "database/mazes_list.json"):
+    def __init__(self, options_filename: str = "static/database/options.json",
+                 list_filename: str = "static/database/mazes_list.json"):
         self.lock = Lock()
         with open(options_filename, encoding="utf-8") as opt_f:
             options_dct = json.load(opt_f)
@@ -24,7 +24,6 @@ class MazesList:
     @staticmethod
     def _filter_condition(elem: dict, filters):
         """"""
-        print(filters)
         for filt in filters:
             if filt in elem.keys() or filt in elem.values():
                 return True
