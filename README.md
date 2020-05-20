@@ -6,6 +6,7 @@ Use Q-Learning techniques to classify mazes by their difficulty considering comp
 ## Installation
 
 Clone the project repository, run /modules/web_handling/app.py to host the project's web interface locally on your device.
+Alternatively install the distributive under dist/
 
 ## Usage example
 
