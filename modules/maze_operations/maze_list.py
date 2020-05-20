@@ -61,7 +61,7 @@ class MazesList:
                               key=lambda x: x["parameters"][key],
                               reverse=self.keys_to_reversed[key])
             filtered = filter(lambda x: self._filter_condition(x["parameters"],
-                                                                   filters),
+                                                               filters),
                               self.mazes_list)
         return sorted(filtered, key=lambda x: x["parameters"][key],
                       reverse=self.keys_to_reversed[key])
