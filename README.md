@@ -30,7 +30,12 @@ Link for video: https://www.youtube.com/channel/UCIZ1h3jawOKm9s3jTzAkBuQ
 
 Use generated data for any non-commercial intends and purposes.
 
+## References
+
+[Maze API][maze]
+
 <!-- Markdown link & img dfn's -->
 [license_link]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/blob/master/LICENSE
 [web_page_link]: http://alex0sobkovych.pythonanywhere.com/
 [wiki]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/wiki
+[maze]: https://maze-api.herokuapp.com/
