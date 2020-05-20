@@ -1,43 +1,43 @@
+"""Work with the Q Learning processing."""
 import numpy as np
 from PIL import Image
 import cv2
 import matplotlib.pyplot as plt
 from matplotlib import style
+from typing import Collection, Union
 
 
 class QAgent:
-    """"""
+    """Agent in the enviroment."""
 
-    def __init__(self, x, y):
-        """"""
+    def __init__(self, x: int, y: int):
+        """Create a new agent at position (x, y)."""
         self.x = x
         self.y = y
 
     @property
-    def position(self):
-        """"""
+    def position(self) -> (int, int):
+        """Get the agent's position."""
         return self.x, self.y
 
-    def __repr__(self):
-        """"""
+    def __repr__(self) -> str:
         return f"{self.x}, {self.y}"
 
-    def move(self, x=None, y=None):
-        """"""
-        # If no value for x, move randomly
+    def move(self, x: int = None, y: int = None):
+        """Move the agent by (x, y) or randomly if no value is given."""
+        # supports all directions
         if x is None:
             self.x += np.random.randint(-1, 2)
         else:
             self.x += x
 
-        # If no value for y, move randomly
         if y is None:
             self.y += np.random.randint(-1, 2)
         else:
             self.y += y
 
-    def action(self, choice):
-        """"""
+    def action(self, choice: int):
+        """Move the agent according to choice."""
         if choice == 0:
             self.move(x=1, y=0)
         elif choice == 1:
@@ -49,11 +49,11 @@ class QAgent:
 
 
 class QLearner:
-    """"""
+    """Represent the enviroment for QLearning."""
 
     MOVE_PENALTY = 1
-    ENEMY_PENALTY = 300
-    FOOD_REWARD = 25
+    WALL_PENALTY = 300
+    FINISH_REWARD = 25
     EPS_DECAY = 0.9998
     OPTIMIZATION_COEFF = 2000
     # BGR for some reason in cv2
@@ -69,8 +69,17 @@ class QLearner:
     WALL_NUM = 4  # enemy key in dict
     ROUTE_NUM = 5
 
-    def __init__(self, maze, epsilon=1.0, episodes: int = 10000,
-                 show_episodes=500):
+    def __init__(self, maze, epsilon: float = 1.0, episodes: int =
+    10000,
+                 show_episodes: int = 500):
+        """Create a new Q enviroment.
+
+        :param maze: maze to base upon
+        :type maze: Maze
+        :param epsilon: probability of choosing action randomly
+        :param episodes: maximum episodes to repeat
+        :param show_episodes: episodes to show (via %)
+        """
         style.use("ggplot")
         self.array = maze.array
         self.size = max(maze.size)
@@ -83,22 +92,35 @@ class QLearner:
         self.env = np.array(self.array, dtype=np.int)
         self.q_table = np.random.random_sample((self.size, self.size) + (4,))
 
-    def get_reward(self, player, obs):
-        """"""
+    def get_reward(self, player: QAgent, obs: tuple) -> int:
+        """Get the reward for moving.
+
+        :param player: current agent
+        :param obs: current observation (agent position)
+        :return: the reward depending on action
+        """
         if (player.x >= self.size or
                 player.y >= self.size or
                 player.x < 0 or
                 player.y < 0 or
                 self.env[player.position] == 1):
             player.x, player.y = obs
-            return -self.ENEMY_PENALTY
+            return -self.WALL_PENALTY
         elif self.env[player.position] == 3:
-            return self.FOOD_REWARD
+            return self.FINISH_REWARD
         else:
             return -self.MOVE_PENALTY
 
-    def draw_maze(self, route, reward=None, new_obs=None, verbose=False):
-        """"""
+    def draw_maze(self, route: Collection, reward: int = None,
+                  new_obs: tuple = None, verbose: bool = False) -> Image:
+        """Draw the maze and return the image.
+
+        :param route: route to include
+        :param reward: reward to indicate completion
+        :param new_obs: new observation (next state)
+        :param verbose: whether to display the image
+        :return: the image object
+        """
         env = np.ndarray((self.size, self.size, 3),
                          dtype=np.uint8)
         env.fill(self.EMPTY_COLOR)
@@ -116,7 +138,7 @@ class QLearner:
         img = img.resize((600, 600), Image.NEAREST)
         if verbose:
             cv2.imshow("image", np.array(img))
-            if reward and reward == self.FOOD_REWARD:
+            if reward and reward == self.FINISH_REWARD:
                 if cv2.waitKey(500):
                     return img
             else:
@@ -124,18 +146,32 @@ class QLearner:
                     return img
         return img
 
-    def choose_action(self, obs):
-        """"""
+    def choose_action(self, obs: tuple) -> Union[int, np.ndarray]:
+        """Choose the action for q agent (randomly or optimally).
+
+        :param obs: current state
+        :return: the action (int 0-3)
+        """
         if np.random.random() > self.epsilon:
             # GET THE ACTION
             return np.argmax(self.q_table[obs])
         else:
             return np.random.randint(0, 4)
 
-    def train_single_episode(self, episode, episode_rewards,
-                             learning_rate, discount, verbose,
-                             track=False):
-        """"""
+    def train_single_episode(self, episode: int, episode_rewards: list,
+                             learning_rate: float, discount: float,
+                             verbose: bool,
+                             track: bool = False) -> Union[Collection, bool]:
+        """Train a single episode.
+
+        :param episode: number of episode (from 0)
+        :param episode_rewards: list of all episode rewards
+        :param learning_rate: learning rate
+        :param discount: discount rate
+        :param verbose: whether to display additional information
+        :param track: whether to track all episodes' routes and rewards
+        :return: if track return route, if solved return False, else True
+        """
         player = QAgent(*self.start)
         unsolved = True
         show = False
@@ -164,8 +200,8 @@ class QLearner:
             current_q = self.q_table[obs][choice]
 
             # change q values according to the reward
-            if reward == self.FOOD_REWARD:
-                new_q = self.FOOD_REWARD
+            if reward == self.FINISH_REWARD:
+                new_q = self.FINISH_REWARD
             else:
                 new_q = ((1 - learning_rate) * current_q +
                          learning_rate * (reward + discount * max_future_q))
@@ -175,7 +211,7 @@ class QLearner:
                 self.draw_maze(route, reward, new_obs, verbose)
 
             episode_reward += reward
-            if reward == self.FOOD_REWARD:
+            if reward == self.FINISH_REWARD:
                 # end cycle if the goal is reached
                 unsolved = False
                 break
@@ -185,9 +221,16 @@ class QLearner:
             return route
         return unsolved
 
-    def train_env(self, learning_rate=0.1, discount=0.95,
-                         verbose=False):
-        """"""
+    def train_env(self, learning_rate: float = 0.1, discount: float = 0.95,
+                  verbose: bool = False) -> dict:
+        """Train the whole enviroment while not solved.
+
+        When solved optimizes route for some iterations.
+        :param learning_rate: learning rate
+        :param discount: discount rate
+        :param verbose: whether to display additional info
+        :return: valuable analysis information
+        """
         episode_rewards = []
         episode = 0
         unsolved = True

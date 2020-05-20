@@ -1,4 +1,4 @@
-""""""
+"""Work with the web app."""
 from flask import request, jsonify, make_response, Flask, render_template,\
     session
 from flask_session import Session
@@ -19,26 +19,24 @@ Session(app)
 def render_main_page():
     """Render the main page on GET request."""
     global maze_list
-    return render_template("index.html",
-                           **maze_list.get_context())
+    return render_template("index.html", **maze_list.get_context())
 
 
 @app.route("/stats.html", methods=["GET"])
 def render_stats_page():
-    """"""
+    """Render statistics page on initial and form request."""
     global maze_list
     if session.get("mazes") is None:
-        session["mazes"] = maze_list.get_current_mazes()
+        session["mazes"] = maze_list.sort_by_key({"sort_option": "max_reward"})
     if request.args:
-        session["mazes"] = maze_list.sort_by_key(request.args["sort_option"],
-                                dict(request.args))
-    return render_template("stats.html",
-                           **maze_list.get_context(), mazes=session["mazes"])
+        session["mazes"] = maze_list.sort_by_key(dict(request.args))
+    return render_template("stats.html", **maze_list.get_context(),
+                           mazes=session["mazes"])
 
 
 @app.route("/api/", methods=["POST"])
 def handle_api_request():
-    """"""
+    """Handle api post requests."""
     global queue
     req = request.get_json()
     print(req)
@@ -61,7 +59,7 @@ def handle_api_request():
 
 @app.route("/editor/", methods=["POST"])
 def handle_editor_request():
-    """"""
+    """Handle editor post requests."""
     global queue
     req = request.get_json()
     print(req)
@@ -82,5 +80,4 @@ if __name__ == '__main__':
     maze_list = MazesList()
     queue = Queue()
     BackgroundProcessor(queue, maze_list).start()
-    print(maze_list.mazes_list)
     app.run()

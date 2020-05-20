@@ -7,9 +7,9 @@
     "api_options": [
         {"api_maze_size": {"title": "Maze Size",
                            "data": [
+                               ["5x5", "5 x 5"],
                                ["10x10", "10 x 10"],
-                               ["20x20", "20 x 20"],
-                               ["30x30", "30 x 30"]
+                               ["20x20", "20 x 20"]
                            ]
                            }
         },
@@ -39,13 +39,13 @@
         ["max_reward", "General Optimality"],
         ["solution episode", "Solution Episode"],
         ["difference", "Route Difference (from optimal)"],
-        ["route_len", "Optimal Route Length"]
+        ["route_len", "Q Route Length"]
     ],
     "filters_set": [
         [["User", "User-Generated"], ["Prims", "Prims"]],
-        [["Woven", "Woven"], ["Growing%20Tree", "Growing Tree"]],
-        [["Recursive%20Backtracker", "Recursive Backtracker"], ["10x10", "10x10"]],
-        [["15x15", "15x15"], ["20x20", "20x20"]],
-        [["30x30", "30x30"]]
+        [["Woven", "Woven"], ["Growing Tree", "Growing Tree"]],
+        [["Recursive Backtracker", "Recursive Backtracker"], ["10x10", "10 x 10"]],
+        [["15x15", "15 x 15"], ["20x20", "20 x 20"]],
+        [["40x40", "40 x 40"]]
     ]
 }

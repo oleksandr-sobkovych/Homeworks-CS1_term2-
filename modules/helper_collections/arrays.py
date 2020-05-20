@@ -3,11 +3,11 @@ import ctypes
 from typing import Any, Iterator, Union
 
 
-# Implements the Array ADT using array capabilities of the ctypes module.
 class Array:
     """Represent a c array."""
-    # Create an array with size elements.
+
     def __init__(self, size: int):
+        """Create an array with size elements."""
         assert size > 0, "Array size must be > 0"
         self._size = size
         # Create the array structure using the ctypes module.
@@ -49,12 +49,14 @@ class _ArrayIterator:
     """Iterator for the low-level array."""
 
     def __init__(self, the_array: Array):
+        """Create an iterator for the array."""
         self._array_ref = the_array
         self._cur_index = 0
 
     def __iter__(self) -> Iterator:
         return self
 
+    # move pointer to the next object
     def __next__(self) -> Any:
         if self._cur_index < len(self._array_ref):
             entry = self._array_ref[self._cur_index]
@@ -67,9 +69,9 @@ class _ArrayIterator:
 # Implementation of the Array2D ADT using an array of arrays.
 class Array2D:
     """Create a 2D Array"""
-    # Creates a 2 -D array of size numRows x numCols.
 
     def __init__(self, num_rows: int, num_cols: int):
+        """Create a 2-D array of size numRows x numCols"""
         # Create a 1 -D array to store an array reference for each row.
         self.rows = Array(num_rows)
 
@@ -78,12 +80,12 @@ class Array2D:
             self.rows[i] = Array(num_cols)
 
     # Returns the number of rows in the 2 -D array.
-    def num_rows(self):
+    def num_rows(self) -> int:
         """Return the number of the rows."""
         return len(self.rows)
 
     # Returns the number of columns in the 2 -D array.
-    def num_cols(self):
+    def num_cols(self) -> int:
         """Return the number of the cols"""
         return len(self.rows[0])
 
