@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to Maze Operations page! &#8212; Maze Difficulty Classifier 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Welcome to Maze Operations page!" href="web.html" />
+    <link rel="prev" title="Welcome to Helper Collections page!" href="helper.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-maze-operations-page">
+<h1>Welcome to Maze Operations page!<a class="headerlink" href="#welcome-to-maze-operations-page" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="here-is-all-the-necessary-documentation-for-the-project">
+<h2>Here is all the necessary documentation for the project:<a class="headerlink" href="#here-is-all-the-necessary-documentation-for-the-project" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-modules.maze_operations.a_star_search">
+<span id="a"></span><h3>A*:<a class="headerlink" href="#module-modules.maze_operations.a_star_search" title="Permalink to this headline">¶</a></h3>
+<p>Use A* to find the optimal route through a maze.</p>
+<dl class="py class">
+<dt id="modules.maze_operations.a_star_search.AStarSearcher">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.a_star_search.</code><code class="sig-name descname">AStarSearcher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maze</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.a_star_search.AStarSearcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect an optimal path in a maze.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.a_star_search.AStarSearcher.search_path">
+<code class="sig-name descname">search_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>set<span class="p">]</span><a class="headerlink" href="#modules.maze_operations.a_star_search.AStarSearcher.search_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for the path using A*.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.maze_operations.maze_adt">
+<span id="maze"></span><h3>Maze:<a class="headerlink" href="#module-modules.maze_operations.maze_adt" title="Permalink to this headline">¶</a></h3>
+<p>Represent a maze.</p>
+<dl class="py class">
+<dt id="modules.maze_operations.maze_adt.Maze">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.maze_adt.</code><code class="sig-name descname">Maze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">size</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">0, 0</span></em>, <em class="sig-param"><span class="n">array</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_adt.Maze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent a maze.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.maze_adt.Maze.find_q_data">
+<code class="sig-name descname">find_q_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_adt.Maze.find_q_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a QAgent to solve the maze and gather desired information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_adt.Maze.from_api">
+<em class="property">classmethod </em><code class="sig-name descname">from_api</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">10, 10</span></em>, <em class="sig-param"><span class="n">algo</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'Recursive Backtracker'</span></em>, <em class="sig-param"><span class="n">solution_len</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maze_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_adt.Maze.from_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single maze with the given parameters from the API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dimensions</strong> – dimensions of the graph</p></li>
+<li><p><strong>algo</strong> – algorithm of the graph</p></li>
+<li><p><strong>solution_len</strong> – length of the solution</p></li>
+<li><p><strong>maze_id</strong> – an id of a specific generated maze</p></li>
+</ul>
+</dd>
+</dl>
+<p>:return:a Maze() instance from API
+:exception MazeConstructionError: change dimensions or solution length</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_adt.Maze.read_from_database">
+<em class="property">classmethod </em><code class="sig-name descname">read_from_database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#modules.maze_operations.maze_adt.Maze" title="modules.maze_operations.maze_adt.Maze">modules.maze_operations.maze_adt.Maze</a><a class="headerlink" href="#modules.maze_operations.maze_adt.Maze.read_from_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a maze from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – path to the maze directory</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a maze object with appropriate parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_adt.Maze.save_to_database">
+<code class="sig-name descname">save_to_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#modules.maze_operations.maze_adt.Maze.save_to_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the maze to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a representative dictionary for sorting database</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="modules.maze_operations.maze_adt.MazeConstructionError">
+<em class="property">exception </em><code class="sig-prename descclassname">modules.maze_operations.maze_adt.</code><code class="sig-name descname">MazeConstructionError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimens</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">solution_len</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_adt.MazeConstructionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An exception for rare conflicting parameters.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="modules.maze_operations.maze_adt.MazeNameError">
+<em class="property">exception </em><code class="sig-prename descclassname">modules.maze_operations.maze_adt.</code><code class="sig-name descname">MazeNameError</code><a class="headerlink" href="#modules.maze_operations.maze_adt.MazeNameError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception for invalid maze name.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="modules.maze_operations.maze_adt.MazeUnsolvableError">
+<em class="property">exception </em><code class="sig-prename descclassname">modules.maze_operations.maze_adt.</code><code class="sig-name descname">MazeUnsolvableError</code><a class="headerlink" href="#modules.maze_operations.maze_adt.MazeUnsolvableError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that maze cannot be solved.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.maze_operations.maze_list">
+<span id="maze-list"></span><h3>Maze List:<a class="headerlink" href="#module-modules.maze_operations.maze_list" title="Permalink to this headline">¶</a></h3>
+<p>Work with a maze list for representing all sortable mazes.</p>
+<dl class="py class">
+<dt id="modules.maze_operations.maze_list.MazesList">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.maze_list.</code><code class="sig-name descname">MazesList</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options_filename</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'static/database/options.json'</span></em>, <em class="sig-param"><span class="n">list_filename</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'static/database/mazes_list.json'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_list.MazesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent a collection of all sortable mazes.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.maze_list.MazesList.get_context">
+<code class="sig-name descname">get_context</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#modules.maze_operations.maze_list.MazesList.get_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get context for web page.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_list.MazesList.names">
+<em class="property">property </em><code class="sig-name descname">names</code><a class="headerlink" href="#modules.maze_operations.maze_list.MazesList.names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all mazes’ names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_list.MazesList.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.maze_list.MazesList.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save mazes to database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.maze_list.MazesList.sort_by_key">
+<code class="sig-name descname">sort_by_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; Collection<a class="headerlink" href="#modules.maze_operations.maze_list.MazesList.sort_by_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort filtered mazes by key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filters</strong> – key and filters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a sorted collection</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.maze_operations.process_maze">
+<span id="process-maze"></span><h3>Process Maze:<a class="headerlink" href="#module-modules.maze_operations.process_maze" title="Permalink to this headline">¶</a></h3>
+<p>Work with a background processor thread.</p>
+<dl class="py class">
+<dt id="modules.maze_operations.process_maze.BackgroundProcessor">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.process_maze.</code><code class="sig-name descname">BackgroundProcessor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n"><a class="reference internal" href="helper.html#modules.helper_collections.llistqueue.Queue" title="modules.helper_collections.llistqueue.Queue">modules.helper_collections.llistqueue.Queue</a></span></em>, <em class="sig-param"><span class="n">maze_list</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#modules.maze_operations.maze_list.MazesList" title="modules.maze_operations.maze_list.MazesList">modules.maze_operations.maze_list.MazesList</a></span></em>, <em class="sig-param"><span class="n">l_rates</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">0.1, 0.3</span></em>, <em class="sig-param"><span class="n">discounts</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">0.95, 0.75</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.process_maze.BackgroundProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A thread for handling maze processing.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.process_maze.BackgroundProcessor.process_maze">
+<code class="sig-name descname">process_maze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maze</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#modules.maze_operations.maze_adt.Maze" title="modules.maze_operations.maze_adt.Maze">modules.maze_operations.maze_adt.Maze</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.process_maze.BackgroundProcessor.process_maze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a maze: use A* and Q Learning techniques.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.process_maze.BackgroundProcessor.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.process_maze.BackgroundProcessor.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the thread while the main program runs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="modules.maze_operations.process_maze.MazeNameExists">
+<em class="property">exception </em><code class="sig-prename descclassname">modules.maze_operations.process_maze.</code><code class="sig-name descname">MazeNameExists</code><a class="headerlink" href="#modules.maze_operations.process_maze.MazeNameExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that maze with this name already exists.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.maze_operations.q_learner">
+<span id="q-learner"></span><h3>Q Learner:<a class="headerlink" href="#module-modules.maze_operations.q_learner" title="Permalink to this headline">¶</a></h3>
+<p>Work with the Q Learning processing.</p>
+<dl class="py class">
+<dt id="modules.maze_operations.q_learner.QAgent">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.q_learner.</code><code class="sig-name descname">QAgent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.q_learner.QAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Agent in the enviroment.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QAgent.action">
+<code class="sig-name descname">action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choice</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.q_learner.QAgent.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the agent according to choice.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QAgent.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.q_learner.QAgent.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the agent by (x, y) or randomly if no value is given.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QAgent.position">
+<em class="property">property </em><code class="sig-name descname">position</code><a class="headerlink" href="#modules.maze_operations.q_learner.QAgent.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the agent’s position.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="modules.maze_operations.q_learner.QLearner">
+<em class="property">class </em><code class="sig-prename descclassname">modules.maze_operations.q_learner.</code><code class="sig-name descname">QLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maze</span></em>, <em class="sig-param"><span class="n">epsilon</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">episodes</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">show_episodes</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modules.maze_operations.q_learner.QLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the enviroment for QLearning.</p>
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QLearner.choose_action">
+<code class="sig-name descname">choose_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>int<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#modules.maze_operations.q_learner.QLearner.choose_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose the action for q agent (randomly or optimally).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obs</strong> – current state</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the action (int 0-3)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QLearner.draw_maze">
+<code class="sig-name descname">draw_maze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">route</span><span class="p">:</span> <span class="n">Collection</span></em>, <em class="sig-param"><span class="n">reward</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">new_obs</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; &lt;module ‘PIL.Image’ from ‘C:\Users\osobkovych\AppData\Roaming\Python\Python37\site-packages\PIL\Image.py’&gt;<a class="headerlink" href="#modules.maze_operations.q_learner.QLearner.draw_maze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw the maze and return the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>route</strong> – route to include</p></li>
+<li><p><strong>reward</strong> – reward to indicate completion</p></li>
+<li><p><strong>new_obs</strong> – new observation (next state)</p></li>
+<li><p><strong>verbose</strong> – whether to display the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the image object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QLearner.get_reward">
+<code class="sig-name descname">get_reward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#modules.maze_operations.q_learner.QAgent" title="modules.maze_operations.q_learner.QAgent">modules.maze_operations.q_learner.QAgent</a></span></em>, <em class="sig-param"><span class="n">obs</span><span class="p">:</span> <span class="n">tuple</span></em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#modules.maze_operations.q_learner.QLearner.get_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the reward for moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> – current agent</p></li>
+<li><p><strong>obs</strong> – current observation (agent position)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the reward depending on action</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QLearner.train_env">
+<code class="sig-name descname">train_env</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">discount</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.95</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#modules.maze_operations.q_learner.QLearner.train_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the whole enviroment while not solved.</p>
+<p>When solved optimizes route for some iterations.
+:param learning_rate: learning rate
+:param discount: discount rate
+:param verbose: whether to display additional info
+:return: valuable analysis information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="modules.maze_operations.q_learner.QLearner.train_single_episode">
+<code class="sig-name descname">train_single_episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">episode</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">episode_rewards</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">discount</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span></em>, <em class="sig-param"><span class="n">track</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Collection<span class="p">, </span>bool<span class="p">]</span><a class="headerlink" href="#modules.maze_operations.q_learner.QLearner.train_single_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a single episode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>episode</strong> – number of episode (from 0)</p></li>
+<li><p><strong>episode_rewards</strong> – list of all episode rewards</p></li>
+<li><p><strong>learning_rate</strong> – learning rate</p></li>
+<li><p><strong>discount</strong> – discount rate</p></li>
+<li><p><strong>verbose</strong> – whether to display additional information</p></li>
+<li><p><strong>track</strong> – whether to track all episodes’ routes and rewards</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if track return route, if solved return False, else True</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Maze Difficulty Classifier</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="helper.html">Welcome to Helper Collections page!</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to Maze Operations page!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#here-is-all-the-necessary-documentation-for-the-project">Here is all the necessary documentation for the project:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Welcome to Maze Operations page!</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="helper.html" title="previous chapter">Welcome to Helper Collections page!</a></li>
+      <li>Next: <a href="web.html" title="next chapter">Welcome to Maze Operations page!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Oleksandr Sobkovych.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maze.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
