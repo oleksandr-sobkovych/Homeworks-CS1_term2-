@@ -1,0 +1,109 @@
+{
+    "name": "small_maze",
+    "size": [
+        2,
+        2
+    ],
+    "array": [
+        [
+            2,
+            0
+        ],
+        [
+            0,
+            3
+        ]
+    ],
+    "optimal_route": [
+        [
+            0,
+            1
+        ],
+        [
+            0,
+            0
+        ],
+        [
+            1,
+            1
+        ]
+    ],
+    "q_data": {
+        "0.1|0.95": {
+            "solution episode": 1,
+            "max_reward": -576,
+            "path": [
+                [
+                    0,
+                    1
+                ],
+                [
+                    0,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ]
+            ],
+            "difference": 3
+        },
+        "0.1|0.75": {
+            "solution episode": 1,
+            "max_reward": -276,
+            "path": [
+                [
+                    0,
+                    1
+                ],
+                [
+                    1,
+                    1
+                ]
+            ],
+            "difference": 2
+        },
+        "0.3|0.95": {
+            "solution episode": 1,
+            "max_reward": -276,
+            "path": [
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ]
+            ],
+            "difference": 1
+        },
+        "0.3|0.75": {
+            "solution episode": 1,
+            "max_reward": -1478,
+            "path": [
+                [
+                    1,
+                    0
+                ],
+                [
+                    0,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ]
+            ],
+            "difference": 2
+        }
+    },
+    "start": [
+        0,
+        0
+    ],
+    "finish": [
+        1,
+        1
+    ]
+}
