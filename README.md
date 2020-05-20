@@ -37,6 +37,6 @@ Use generated data for any non-commercial intends and purposes.
 
 <!-- Markdown link & img dfn's -->
 [license_link]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/blob/master/LICENSE
-[web_page_link]: http://alex0sobkovych.pythonanywhere.com/
+[web_page_link]: https://maze-classifier.herokuapp.com/
 [wiki]: https://github.com/Alex-quickcoder/Homeworks-CS1_term2-/wiki
 [maze]: https://maze-api.herokuapp.com/
