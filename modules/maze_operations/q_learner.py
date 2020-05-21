@@ -70,7 +70,7 @@ class QLearner:
     ROUTE_NUM = 5
 
     def __init__(self, maze, epsilon: float = 1.0, episodes: int =
-    10000,
+                 10000,
                  show_episodes: int = 500):
         """Create a new Q enviroment.
 
