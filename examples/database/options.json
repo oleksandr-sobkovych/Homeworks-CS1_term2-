@@ -1,0 +1,51 @@
+{    "construct_types": [
+        ["construct_maze_api", "Maze API",
+         "Set API parameters and hit Create button"],
+        ["construct_editor", "Editor",
+         "Build your own maze and hit Create button"]
+    ],
+    "api_options": [
+        {"api_maze_size": {"title": "Maze Size",
+                           "data": [
+                               ["5x5", "5 x 5"],
+                               ["10x10", "10 x 10"],
+                               ["20x20", "20 x 20"]
+                           ]
+                           }
+        },
+        {
+            "api_algorithm": {
+                "title": "API Algorithm",
+                "data": [
+                    ["Prims", "Prims"],
+                    ["Woven", "Woven"],
+                    ["Growing Tree", "Growing Tree"],
+                    ["Recursive Backtracker", "Recursive Backtracker"]
+                ]
+            }
+        },
+        {
+            "api_length": {
+                "title": "Solution length (optional)"
+            }
+        },
+        {
+            "api_maze_id": {
+                "title": "Maze ID (optional, overwrites everything)"
+            }
+        }
+    ],
+    "sort_keys": [
+        ["max_reward", "General Optimality"],
+        ["solution episode", "Solution Episode"],
+        ["difference", "Route Difference (from optimal)"],
+        ["route_len", "Q Route Length"]
+    ],
+    "filters_set": [
+        [["User", "User-Generated"], ["Prims", "Prims"]],
+        [["Woven", "Woven"], ["Growing Tree", "Growing Tree"]],
+        [["Recursive Backtracker", "Recursive Backtracker"], ["10x10", "10 x 10"]],
+        [["15x15", "15 x 15"], ["20x20", "20 x 20"]],
+        [["40x40", "40 x 40"]]
+    ]
+}
