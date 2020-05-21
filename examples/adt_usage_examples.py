@@ -26,12 +26,9 @@ if __name__ == '__main__':
     maze1._find_optimal_route()  #uses AStarSearcher and _CellNode
     queue.push(maze1)
     new_queue = Queue()
-    try:
-        BackgroundProcessor(new_queue, m_list).start()
-    except FileNotFoundError:
-        print("Done processing.")
     new_queue.push(maze1)
     new_queue.push(maze2)
-    print(QLearner(maze1).train_env(verbose=True))  #uses QAgent
+    # uses QAgent
+    print(QLearner(maze1, show_episodes=50).train_env(verbose=True))
     maze3 = Maze.from_api("new_maze", maze_id="5da9f969461a8c0017016912")
-    QLearner(maze3).train_env(verbose=True)
+    QLearner(maze3, show_episodes=250).train_env(verbose=True)
